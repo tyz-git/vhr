@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                //所有接口必须认证通过后才可以访问  
+                //所有接口必须认证通过后才可以访问
                 .anyRequest().authenticated()
                 .and()
                 //表单登录设置
