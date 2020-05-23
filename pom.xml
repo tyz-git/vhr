@@ -48,6 +48,16 @@
             <scope>runtime</scope>
             <version>5.1.27</version>
         </dependency>
+        <!-- devtools 热部署-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <!-- 在项目继承的时候，依赖也会继承。但是开发者为了方便开发加入的插件是不需要被带到其他项目中的
+                 所以把optional设置成true，就是防止把这个依赖带到其他项目中
+             -->
+            <optional>true</optional>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

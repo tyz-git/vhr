@@ -68,6 +68,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         PrintWriter out = resp.getWriter();
                         //返回登录成功的用户信息
                         Hr hr = (Hr) auth.getPrincipal();
+                        //登录成功后会把用户信息返回回去，密码也在对象中。所以把密码返回去显然不合适，所以这里我们手动设置密码为null
+                        hr.setPassword(null);
                         //封装响应数据
                         RespBean ok = RespBean.success("登录成功", hr);
                         //将通用返回结果转化成字符串
@@ -99,7 +101,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         }else if (exception instanceof AccountExpiredException){
                             error.setMsg("账户过期，请联系管理员!");
                         }else if (exception instanceof BadCredentialsException){
-                            error.setMsg("用户名或密码输入错误，请联系管理员!");
+                            error.setMsg("用户名或密码输入错误，请重新输入!");
                         }
                         //把响应的数据转化成字符串
                         String s = new ObjectMapper().writeValueAsString(error);
@@ -116,8 +118,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //退出登录成功的处理
                 .logoutSuccessHandler(new LogoutSuccessHandler() {
                     @Override
-                    public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-
+                    public void onLogoutSuccess(HttpServletRequest req, HttpServletResponse resp, Authentication auth) throws IOException, ServletException {
+                        resp.setContentType("application/json;charset=utf-8");
+                        PrintWriter out = resp.getWriter();
+                        out.write(new ObjectMapper().writeValueAsString("已退出登录!"));
+                        out.flush();
+                        out.close();
                     }
                 })
                 //和退出登录功能相关的接口直接放行
