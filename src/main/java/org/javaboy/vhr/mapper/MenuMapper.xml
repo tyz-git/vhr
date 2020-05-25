@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.MenuMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.Menu">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="component" jdbcType="VARCHAR" property="component" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="iconCls" jdbcType="VARCHAR" property="iconCls" />
+    <result column="parentId" jdbcType="INTEGER" property="parentId" />
+    <result column="enabled" jdbcType="BIT" property="enabled" />
+    <association property="meta" javaType="org.javaboy.vhr.model.Meta">
+      <result column="keepAlive" jdbcType="BIT" property="keepAlive" />
+      <result column="requireAuth" jdbcType="BIT" property="requireAuth" />
+    </association>
+  </resultMap>
+
+  <!-- 根据用户id获取对应菜单列表   extend:当前的resultMap继承了BaseResultMap,所以当前的resultMap中也包含了BaseResultMap的配置-->
+  <resultMap id="Menu2" type="org.javaboy.vhr.model.Menu" extends="BaseResultMap">
+    <collection property="children" ofType="org.javaboy.vhr.model.Menu">
+      <id column="id2" jdbcType="INTEGER" property="id" />
+      <result column="url2" jdbcType="VARCHAR" property="url" />
+      <result column="path2" jdbcType="VARCHAR" property="path" />
+      <result column="component2" jdbcType="VARCHAR" property="component" />
+      <result column="name2" jdbcType="VARCHAR" property="name" />
+      <result column="iconCls2" jdbcType="VARCHAR" property="iconCls" />
+      <result column="parentId2" jdbcType="INTEGER" property="parentId" />
+      <result column="enabled2" jdbcType="BIT" property="enabled" />
+      <association property="meta" javaType="org.javaboy.vhr.model.Meta">
+        <result column="keepAlive" jdbcType="BIT" property="keepAlive" />
+        <result column="requireAuth" jdbcType="BIT" property="requireAuth" />
+      </association>
+    </collection>
+  </resultMap>
+
+  <select id="getMenuListByHrId" resultMap="Menu2" parameterType="java.lang.Integer">
+    SELECT
+      m1.*, m2.id AS id2, m2.url AS url2, m2.path AS paht2, m2.component AS component2,
+      m2.`name` AS name2, m2.iconCls AS iconCls2, m2.keepAlive AS keepAlive2, m2.requireAuth AS requireAuth2,
+      m2.parentId AS parentId2, m2.enabled AS enabled2
+    FROM menu m1 LEFT JOIN menu m2 on m1.id = m2.parentId LEFT JOIN menu_role mr ON m2.id = mr.mid LEFT JOIN hr_role hr ON mr.rid = hr.rid WHERE hr.hrid = #{userId}
+  </select>
+</mapper>
