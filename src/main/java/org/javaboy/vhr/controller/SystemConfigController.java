@@ -6,6 +6,7 @@ import org.javaboy.vhr.model.RespBean;
 import org.javaboy.vhr.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,10 +21,10 @@ public class SystemConfigController {
     MenuService menuService;
 
 
-    @PostMapping(value = "/getMenuListByHrId")
+    @GetMapping(value = "/getMenuListByHrId")
     public RespBean getMenuListByHrId(){
         //((Hr) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()  --从SpringSecurity中获取用户id
         List<Menu> menuList = menuService.getMenuListByHrId(((Hr) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
-        return RespBean.success("成功", menuList);
+        return RespBean.success(null, menuList);
     }
 }

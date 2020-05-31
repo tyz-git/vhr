@@ -21,4 +21,8 @@
     select * from hr where username =  #{username}
   </select>
 
+  <select id="getRoleListByHrId" resultType="org.javaboy.vhr.model.Role">
+    SELECT r.* FROM role r LEFT JOIN hr_role hr ON r.id = hr.rid LEFT JOIN hr h ON h.id = hr.hrid WHERE h.id = #{id}
+  </select>
+
 </mapper>

@@ -11,4 +11,10 @@ public interface MenuService {
      * @return
      */
     List<Menu> getMenuListByHrId(Integer userId);
+
+    /**
+     * 获取每个菜单都需要哪些角色才可以访问
+     * @return
+     */
+    List<Menu> getMenuListWithRole();
 }

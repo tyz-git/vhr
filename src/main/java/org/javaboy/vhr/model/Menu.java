@@ -23,6 +23,8 @@ public class Menu {
 
     private List<Menu> children;
 
+    private List<Role> roles;
+
     @Override
     public String toString() {
         return "Menu{" +
@@ -89,6 +91,14 @@ public class Menu {
 
     public Integer getParentId() {
         return parentId;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     public void setParentId(Integer parentId) {

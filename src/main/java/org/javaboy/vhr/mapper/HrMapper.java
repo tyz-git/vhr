@@ -2,7 +2,10 @@ package org.javaboy.vhr.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.javaboy.vhr.model.Hr;
+import org.javaboy.vhr.model.Role;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface HrMapper {
@@ -24,4 +27,6 @@ public interface HrMapper {
      * @return
      */
     Hr loadUserByUsername(String username);
+
+    List<Role> getRoleListByHrId(Integer id);
 }

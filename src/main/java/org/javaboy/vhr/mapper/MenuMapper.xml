@@ -36,9 +36,23 @@
 
   <select id="getMenuListByHrId" resultMap="Menu2" parameterType="java.lang.Integer">
     SELECT
-      m1.*, m2.id AS id2, m2.url AS url2, m2.path AS paht2, m2.component AS component2,
+      m1.*, m2.id AS id2, m2.url AS url2, m2.path AS path2, m2.component AS component2,
       m2.`name` AS name2, m2.iconCls AS iconCls2, m2.keepAlive AS keepAlive2, m2.requireAuth AS requireAuth2,
       m2.parentId AS parentId2, m2.enabled AS enabled2
     FROM menu m1 LEFT JOIN menu m2 on m1.id = m2.parentId LEFT JOIN menu_role mr ON m2.id = mr.mid LEFT JOIN hr_role hr ON mr.rid = hr.rid WHERE hr.hrid = #{userId}
   </select>
+
+
+  <resultMap id="menuWithRole" type="org.javaboy.vhr.model.Menu" extends="BaseResultMap">
+    <collection property="roles" ofType="org.javaboy.vhr.model.Role">
+      <id property="id" column="rid"></id>
+      <result property="name" column="rname"></result>
+      <result property="nameZh" column="rnameZh"></result>
+    </collection>
+  </resultMap>
+  <select id="getMenuListWithRole" resultMap="menuWithRole">
+    SELECT m.*,r.id AS rid, r.`name` AS rname, r.nameZh AS rnameZh FROM menu m LEFT JOIN menu_role mr ON m.id = mr.mid LEFT JOIN role r ON mr.rid = r.id
+  </select>
+
+
 </mapper>
