@@ -54,7 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        //放行登录页，不放行的话security也会把登录页面拦截下来
+        //放行登录页，如果不放行，当用户还没有登录就访问接口，正常情况应该跳到登录页让用户登录。
+        // 但是如果spring security把这个操作给拦截了，那么就不能正常的跳到登录页了。用户也就没办法进行登录操作。最后会给用户一个服务器没有响应的页面
         web.ignoring().antMatchers("/login");
     }
 
@@ -81,7 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("password")
                 //登录功能地址
                 .loginProcessingUrl("/doLogin")
-                //登录页面为login
+                //登录页为login,如果此用户还没有登录就访问接口，直接跳到登录页
                 .loginPage("/login")
                 //登录成功的处理(由于前后端分离，所以需要把响应数据处理成json再返回，而不是登录成功后服务端直接跳转页面)
                 .successHandler(new AuthenticationSuccessHandler() {
