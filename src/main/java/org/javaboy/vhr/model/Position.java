@@ -1,5 +1,7 @@
 package org.javaboy.vhr.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Position {
@@ -7,7 +9,9 @@ public class Position {
 
     private String name;
 
-    private Date createdate;
+    //网络传输时，自动转换为指定格式。要记得补充时区，否则会有时差
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Beijing")
+    private Date createDate;
 
     private Boolean enabled;
 
@@ -27,12 +31,12 @@ public class Position {
         this.name = name == null ? null : name.trim();
     }
 
-    public Date getCreatedate() {
-        return createdate;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setCreatedate(Date createdate) {
-        this.createdate = createdate;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     public Boolean getEnabled() {
@@ -41,5 +45,16 @@ public class Position {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", createDate=" + createDate +
+                ", enabled=" + enabled +
+                '}';
     }
 }

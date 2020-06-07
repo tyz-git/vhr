@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -155,6 +156,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 //取消对csrf的防御
-                .csrf().disable();
+                .csrf().disable()
+                //处理异常情况(当用户在没有登录的情况下，请求了菜单接口，这时默认应该给它重定向到登录页，但这时可能会被cors拦截，所以response是空的，前台逻辑也走不通了。所以我们需要处理一下异常情况，不让它帮我们重定向，只返回数据就可以了，剩下的交给前台去处理)
+                .exceptionHandling()
+                .authenticationEntryPoint(new AuthenticationEntryPoint() {
+                    @Override
+                    public void commence(HttpServletRequest req, HttpServletResponse resp, AuthenticationException exception) throws IOException, ServletException {
+                        resp.setContentType("application/json;charset=utf-8");
+                        PrintWriter out = resp.getWriter();
+                        out.write(new ObjectMapper().writeValueAsString("没有权限，请联系管理员!"));
+                        out.flush();
+                        out.close();
+                    }
+                });
     }
 }

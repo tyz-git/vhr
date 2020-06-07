@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.JobLevelMapper">
+
+  <resultMap id="BaseJobLevelMap" type="org.javaboy.vhr.model.JobLevel">
+    <id property="id" column="id"></id>
+    <result property="name" column="name"></result>
+    <result property="titleLevel" column="titleLevel"></result>
+    <result property="createDate" column="createDate"></result>
+    <result property="enabled" column="enabled"></result>
+  </resultMap>
+
+  <select id="getJobLevelList" resultMap="BaseJobLevelMap">
+    select * from joblevel
+  </select>
+
+  <insert id="addJobLevelSelective" parameterType="org.javaboy.vhr.model.JobLevel">
+    insert into joblevel
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="titleLevel != null">
+        titleLevel,
+      </if>
+      <if test="createDate != null">
+        createDate,
+      </if>
+      <if test="enabled != null">
+        enabled
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id},
+      </if>
+      <if test="name != null">
+        #{name},
+      </if>
+      <if test="titleLevel != null">
+        #{titleLevel},
+      </if>
+      <if test="createDate != null">
+        #{createDate},
+      </if>
+      <if test="enabled != null">
+        #{enabled}
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateJobLevelSelective" parameterType="org.javaboy.vhr.model.JobLevel">
+    update joblevel
+    <set>
+      <if test="name != null">
+        name = #{name},
+      </if>
+      <if test="titleLevel != null">
+        titleLevel = #{titleLevel},
+      </if>
+      <if test="createDate != null">
+        createDate = #{createDate},
+      </if>
+      <if test="enabled != null">
+        enabled = #{enabled}
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+  <delete id="deleteJobLevel" parameterType="java.lang.Integer">
+    delete from joblevel where id = #{id}
+  </delete>
+
+  <delete id="deleteJobLevels">
+    delete from joblevel where id in
+    <foreach collection="ids" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+  </delete>
+
+</mapper>
