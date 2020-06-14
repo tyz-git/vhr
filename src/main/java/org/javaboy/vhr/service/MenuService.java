@@ -17,4 +17,11 @@ public interface MenuService {
      * @return
      */
     List<Menu> getMenuListWithRole();
+
+    /**
+     * 获取菜单列表
+     * @return
+     */
+    List<Menu> getMenuList();
+
 }

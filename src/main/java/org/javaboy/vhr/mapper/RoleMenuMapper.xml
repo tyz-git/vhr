@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.RoleMenuMapper">
+
+  <select id="getSelectMenuListByRid" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    select mid from menu_role where rid = #{rid}
+  </select>
+
+  <delete id="deleteMenuByRoleId" parameterType="java.lang.Integer">
+    delete from menu_role where rid = #{rid}
+  </delete>
+
+  <insert id="insertMenuByRoleId">
+    insert into menu_role (rid,mid)
+    values
+    <foreach collection="mids" separator="," item="mid">
+      (#{rid}, #{mid})
+    </foreach>
+  </insert>
+</mapper>

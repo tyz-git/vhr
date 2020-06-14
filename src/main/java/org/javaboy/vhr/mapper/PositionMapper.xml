@@ -49,7 +49,7 @@
       <if test="createDate != null">
         createDate = #{createDate},
       </if>
-      <if test="enabled != null and enabled != ''">
+      <if test="enabled != null">
         enabled = #{enabled}
       </if>
     </set>

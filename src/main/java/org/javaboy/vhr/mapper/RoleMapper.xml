@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.RoleMapper">
+
+  <resultMap id="BaseRoleMap" type="org.javaboy.vhr.model.Role">
+    <id property="id" column="id"></id>
+    <result property="name" column="name"></result>
+    <result property="nameZh" column="nameZh"></result>
+  </resultMap>
+
+
+  <select id="getRoleList" resultMap="BaseRoleMap">
+    select * from role
+  </select>
+
+  <insert id="addRole" parameterType="org.javaboy.vhr.model.Role">
+    insert into role (name, nameZh) values (#{name}, #{nameZh})
+  </insert>
+
+  <delete id="deleteRole" parameterType="java.lang.Integer">
+    delete from role where id = #{id}
+  </delete>
+
+</mapper>

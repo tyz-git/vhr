@@ -160,9 +160,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //处理异常情况(当用户在没有登录的情况下，请求了菜单接口，这时默认应该给它重定向到登录页，但这时可能会被cors拦截，所以response是空的，前台逻辑也走不通了。所以我们需要处理一下异常情况，不让它帮我们重定向，只返回数据就可以了，剩下的交给前台去处理)
                 .exceptionHandling()
                 .authenticationEntryPoint(new AuthenticationEntryPoint() {
+                    //这里已经设置了如果没有登录的话就返回响应数据给前台，让前台完成页面的跳转。不需要后台去做登录页跳转，所以上面配置的'/login'就可以不用配置了
                     @Override
                     public void commence(HttpServletRequest req, HttpServletResponse resp, AuthenticationException exception) throws IOException, ServletException {
                         resp.setContentType("application/json;charset=utf-8");
+                        //没有登录的话就返回401
+                        resp.setStatus(401);
                         PrintWriter out = resp.getWriter();
                         out.write(new ObjectMapper().writeValueAsString("没有权限，请联系管理员!"));
                         out.flush();

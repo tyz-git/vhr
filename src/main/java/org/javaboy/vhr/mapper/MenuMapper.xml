@@ -54,5 +54,22 @@
     SELECT m.*,r.id AS rid, r.`name` AS rname, r.nameZh AS rnameZh FROM menu m LEFT JOIN menu_role mr ON m.id = mr.mid LEFT JOIN role r ON mr.rid = r.id
   </select>
 
+  <resultMap id="MenuListMap" type="org.javaboy.vhr.model.Menu">
+    <id property="id" column="id1"></id>
+    <result property="name" column="name1"></result>
+    <collection property="children" ofType="org.javaboy.vhr.model.Menu">
+      <id property="id" column="id2"></id>
+      <result property="name" column="name2"></result>
+      <collection property="children" ofType="org.javaboy.vhr.model.Menu">
+        <id property="id" column="id3"></id>
+        <result property="name" column="name3"></result>
+      </collection>
+    </collection>
+  </resultMap>
+  
+  <select id="getMenuList" resultMap="MenuListMap">
+    select m1.id AS id1, m1.name AS name1, m2.id AS id2, m2.name AS name2, m3.id AS id3, m3.name AS name3 from menu m1 LEFT JOIN menu m2 ON m1.id = m2.parentId LEFT JOIN menu m3 ON m2.id = m3.parentId where m3.enabled = true
+  </select>
+
 
 </mapper>
