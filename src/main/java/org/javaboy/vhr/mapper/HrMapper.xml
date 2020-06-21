@@ -25,4 +25,57 @@
     SELECT r.* FROM role r LEFT JOIN hr_role hr ON r.id = hr.rid LEFT JOIN hr h ON h.id = hr.hrid WHERE h.id = #{id}
   </select>
 
+
+  <resultMap id="getHrListMap" type="org.javaboy.vhr.model.Hr" extends="BaseResultMap">
+    <collection property="roles" ofType="org.javaboy.vhr.model.Role">
+      <id property="id" column="rid"></id>
+      <result property="name" column="rname"></result>
+      <result property="nameZh" column="nameZh"></result>
+    </collection>
+  </resultMap>
+  <select id="getHrList" parameterType="java.lang.Integer" resultMap="getHrListMap">
+    select h.*, r.id as rid, r.name as rname, r.nameZh from hr h LEFT JOIN hr_role hr ON h.id = hr.hrid LEFT JOIN role r ON hr.rid = r.id where h.id != #{id}
+    <if test="hrName != null">
+      and h.name like concat('%',#{hrName},'%')
+    </if>
+  </select>
+
+  <update id="updateHr" parameterType="org.javaboy.vhr.model.Hr">
+    update hr
+    <set>
+      <if test="name != null">
+        name = #{name},
+      </if>
+      <if test="phone != null">
+        phone = #{phone},
+      </if>
+      <if test="telephone != null">
+        telephone = #{telephone},
+      </if>
+      <if test="address != null">
+        address = #{address},
+      </if>
+      <if test="enabled != null">
+        enabled = #{enabled},
+      </if>
+      <if test="username != null">
+        username = #{username},
+      </if>
+      <if test="password != null">
+        password = #{password},
+      </if>
+      <if test="userface != null">
+        userface = #{userface},
+      </if>
+      <if test="remark != null">
+        remark = #{remark},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+  <delete id="deleteHr" parameterType="java.lang.Integer">
+    delete from hr where id = #{id}
+  </delete>
+
 </mapper>

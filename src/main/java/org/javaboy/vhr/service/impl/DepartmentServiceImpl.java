@@ -19,6 +19,17 @@ public class DepartmentServiceImpl implements DepartmentService {
     DepartmentMapper departmentMapper;
 
     @Override
+    public void deleteDepartment(Department department) {
+        departmentMapper.deleteDepartment(department);
+    }
+
+    @Override
+    public void addDepartment(Department department) {
+        department.setEnabled(true);
+        departmentMapper.addDepartment(department);
+    }
+
+    @Override
     public List<Department> getDepartmentList() {
         List<Department> departmentList = departmentMapper.getDepartmentList(-1);
         return departmentList;

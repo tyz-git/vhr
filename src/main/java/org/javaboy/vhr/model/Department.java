@@ -1,5 +1,6 @@
 package org.javaboy.vhr.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Department {
@@ -15,15 +16,9 @@ public class Department {
 
     private Boolean isParent;
 
-    private List<Department> children;
+    private List<Department> children = new ArrayList<>();
 
-    public List<Department> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<Department> children) {
-        this.children = children;
-    }
+    private Integer result;
 
     public Integer getId() {
         return id;
@@ -71,5 +66,21 @@ public class Department {
 
     public void setParent(Boolean parent) {
         isParent = parent;
+    }
+
+    public List<Department> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Department> children) {
+        this.children = children;
+    }
+
+    public Integer getResult() {
+        return result;
+    }
+
+    public void setResult(Integer result) {
+        this.result = result;
     }
 }

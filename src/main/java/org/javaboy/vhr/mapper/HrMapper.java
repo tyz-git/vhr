@@ -1,6 +1,7 @@
 package org.javaboy.vhr.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.javaboy.vhr.model.Hr;
 import org.javaboy.vhr.model.Role;
 import org.springframework.stereotype.Repository;
@@ -29,4 +30,25 @@ public interface HrMapper {
     Hr loadUserByUsername(String username);
 
     List<Role> getRoleListByHrId(Integer id);
+
+    /**
+     * 获取操作员列表
+     * @param id
+     * @return
+     */
+    List<Hr> getHrList(@Param("id") Integer id, @Param("hrName") String hrName);
+
+    /**
+     * 更新操作员
+     * @param hr
+     * @return
+     */
+    int updateHr(Hr hr);
+
+    /**
+     * 删除操作员
+     * @param id
+     * @return
+     */
+    int deleteHr(Integer id);
 }

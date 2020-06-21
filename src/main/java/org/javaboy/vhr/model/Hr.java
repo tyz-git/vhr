@@ -1,5 +1,6 @@
 package org.javaboy.vhr.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -98,7 +99,7 @@ public class Hr implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
     public void setUsername(String username) {
@@ -109,11 +110,12 @@ public class Hr implements UserDetails {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
-
+    /**
+     * 生成json的时候忽略它，因为前后台交互的时候并不需要这个这个变量
+     * @return
+     */
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>(roles.size());
         //把此用户拥有的角色列表转换成security指定的格式返回
@@ -121,6 +123,10 @@ public class Hr implements UserDetails {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         }
         return authorities;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     @Override

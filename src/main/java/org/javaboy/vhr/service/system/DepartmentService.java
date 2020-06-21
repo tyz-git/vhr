@@ -16,4 +16,17 @@ public interface DepartmentService {
      */
     List<Department> getDepartmentList();
 
+    /**
+     * 添加部门
+     * @param department
+     */
+    void addDepartment(Department department);
+
+    /**
+     * 删除部门
+     * @param department
+     * @return
+     */
+    void deleteDepartment(Department department);
+
 }

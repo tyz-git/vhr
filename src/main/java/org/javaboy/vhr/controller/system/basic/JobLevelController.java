@@ -1,4 +1,4 @@
-package org.javaboy.vhr.controller.system;
+package org.javaboy.vhr.controller.system.basic;
 
 import org.javaboy.vhr.model.JobLevel;
 import org.javaboy.vhr.model.RespBean;

@@ -11,6 +11,19 @@
     <result property="isParent" column="isParent"></result>
   </resultMap>
 
+  <!-- 存储过程执行完会把输出数据设置到你传过来的对象中 -->
+  <select id="addDepartment" statementType="CALLABLE">
+    <!--name:前台传过来的部门名称, parentId:前台传过来的父部门的id, enabled:后台逻辑设置的参数
+        result:存储插入sql的受影响行数, id:插入数据后自增的id
+     -->
+    call addDep(#{name,mode=IN,jdbcType=VARCHAR}, #{parentId,mode=IN,jdbcType=INTEGER},#{enabled,mode=IN,jdbcType=BOOLEAN},
+    #{result,mode=OUT,jdbcType=INTEGER}, #{id,mode=OUT,jdbcType=INTEGER})
+  </select>
+
+  <delete id="deleteDepartment" statementType="CALLABLE">
+    call deleteDep(#{id,mode=IN,jdbcType=INTEGER}, #{result, mode=OUT, jdbcType=INTEGER})
+  </delete>
+
   <resultMap id="getDepartmentListWithChildren" type="org.javaboy.vhr.model.Department" extends="BaseDepartmentMap">
     <!-- select:获取children数据需要执行的方法,
     column:用上一次查询结果中的某个字段当做此方法的参数，这两个属性配合使用实现递归-->
