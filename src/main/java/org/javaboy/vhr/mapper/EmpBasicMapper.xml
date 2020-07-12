@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.EmpBasicMapper">
+
+  <resultMap id="BaseEmpBasic" type="org.javaboy.vhr.model.Employee">
+    <id property="id" column="id"></id>
+    <result property="name" column="name"></result>
+    <result property="gender" column="gender"></result>
+    <result property="birthday" column="birthday"></result>
+    <result property="idCard" column="idCard"></result>
+    <result property="wedlock" column="wedlock"></result>
+    <result property="nationId" column="nationId"></result>
+    <result property="nativePlace" column="nativePlace"></result>
+    <result property="politicId" column="politicId"></result>
+    <result property="email" column="email"></result>
+    <result property="phone" column="phone"></result>
+    <result property="address" column="address"></result>
+    <result property="departmentId" column="departmentId"></result>
+    <result property="jobLevelId" column="jobLevelId"></result>
+    <result property="posId" column="posId"></result>
+    <result property="engageForm" column="engageForm"></result>
+    <result property="tiptopDegree" column="tiptopDegree"></result>
+    <result property="specialty" column="specialty"></result>
+    <result property="school" column="school"></result>
+    <result property="beginDate" column="beginDate"></result>
+    <result property="workState" column="workState"></result>
+    <result property="workID" column="workID"></result>
+    <result property="contractTerm" column="contractTerm"></result>
+    <result property="conversionTime" column="conversionTime"></result>
+    <result property="notWorkDate" column="notWorkDate"></result>
+    <result property="beginContract" column="beginContract"></result>
+    <result property="endContract" column="endContract"></result>
+  </resultMap>
+
+  <resultMap id="getEmpBasicListByPageMap" type="org.javaboy.vhr.model.Employee" extends="BaseEmpBasic">
+    <association property="nation" javaType="org.javaboy.vhr.model.Nation">
+      <id property="id" column="nid"></id>
+      <result property="name" column="nname"></result>
+    </association>
+    <association property="politicsstatus" javaType="org.javaboy.vhr.model.Politicsstatus">
+      <id property="id" column="pid"></id>
+      <result property="name" column="pname"></result>
+    </association>
+    <association property="department" javaType="org.javaboy.vhr.model.Department">
+      <id property="id" column="did"></id>
+      <result property="name" column="dname"></result>
+    </association>
+    <association property="jobLevel" javaType="org.javaboy.vhr.model.JobLevel">
+      <id property="id" column="jid"></id>
+      <result property="name" column="jname"></result>
+    </association>
+    <association property="position" javaType="org.javaboy.vhr.model.Position">
+      <id property="id" column="positionId"></id>
+      <result property="name" column="positionName"></result>
+    </association>
+  </resultMap>
+  <select id="getEmpBasicListByPage" resultMap="getEmpBasicListByPageMap" >
+    select e.*, n.id AS nid, n.`name` AS nname, p.id AS pid, p.`name` AS pname, d.id AS did, d.name AS dname, j.id AS jid, j.`name` AS jname, pos.id AS positionId, pos.`name` AS positionName from employee e
+    LEFT JOIN nation n ON e.nationId = n.id
+    LEFT JOIN politicsstatus p ON e.politicId = p.id
+    LEFT JOIN department d ON e.departmentId = d.id
+    LEFT JOIN joblevel j ON e.jobLevelId = j.id
+    LEFT JOIN position pos ON e.posId = pos.id
+    LIMIT #{page}, #{size}
+  </select>
+
+  <select id="getEmployeeCount" resultType="Integer">
+    select count(*) from employee
+  </select>
+
+  <insert id="addEmployee">
+    insert into employee
+    <trim prefix="(" suffix=")"  prefixOverrides=",">
+        <if test="name != null">
+            name,
+        </if>
+        <if test="gender != null">
+            gender,
+        </if>
+        <if test="birthday != null">
+            birthday,
+        </if>
+        <if test="idCard != null">
+            idCard,
+        </if>
+        <if test="wedlock != null">
+            wedlock,
+        </if>
+        <if test="nationId != null">
+            nationId,
+        </if>
+        <if test="nativePlace != null">
+            nativePlace,
+        </if>
+        <if test="politicId != null">
+            politicId,
+        </if>
+        <if test="email != null">
+            email,
+        </if>
+        <if test="phone != null">
+            phone,
+        </if>
+        <if test="address != null">
+            address,
+        </if>
+        <if test="departmentId != null">
+            departmentId,
+        </if>
+        <if test="jobLevelId != null">
+            jobLevelId,
+        </if>
+        <if test="posId != null">
+            posId,
+        </if>
+        <if test="engageForm != null">
+            engageForm,
+        </if>
+        <if test="tiptopDegree != null">
+            tiptopDegree,
+        </if>
+        <if test="specialty != null">
+            specialty,
+        </if>
+        <if test="school != null">
+            school,
+        </if>
+        <if test="beginDate != null">
+            beginDate,
+        </if>
+        <if test="workState != null">
+            workState,
+        </if>
+        <if test="workID != null">
+            workID,
+        </if>
+        <if test="contractTerm != null">
+            contractTerm,
+        </if>
+        <if test="conversionTime != null">
+            conversionTime,
+        </if>
+        <if test="notWorkDate != null">
+            notWorkDate,
+        </if>
+        <if test="beginContract != null">
+            beginContract,
+        </if>
+        <if test="endContract != null">
+            endContract
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")"  prefixOverrides=",">
+      <if test="name != null">
+        #{name},
+      </if>
+      <if test="gender != null">
+        #{gender},
+      </if>
+      <if test="birthday != null">
+        #{birthday},
+      </if>
+      <if test="idCard != null">
+        #{idCard},
+      </if>
+      <if test="wedlock != null">
+        #{wedlock},
+      </if>
+      <if test="nationId != null">
+        #{nationId},
+      </if>
+      <if test="nativePlace != null">
+        #{nativePlace},
+      </if>
+      <if test="politicId != null">
+        #{politicId},
+      </if>
+      <if test="email != null">
+        #{email},
+      </if>
+      <if test="phone != null">
+        #{phone},
+      </if>
+      <if test="address != null">
+        #{address},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId},
+      </if>
+      <if test="jobLevelId != null">
+        #{jobLevelId},
+      </if>
+      <if test="posId != null">
+        #{posId},
+      </if>
+      <if test="engageForm != null">
+        #{engageForm},
+      </if>
+      <if test="tiptopDegree != null">
+        #{tiptopDegree},
+      </if>
+      <if test="specialty != null">
+        #{specialty},
+      </if>
+      <if test="school != null">
+        #{school},
+      </if>
+      <if test="beginDate != null">
+        #{beginDate},
+      </if>
+      <if test="workState != null">
+        #{workState},
+      </if>
+      <if test="workID != null">
+        #{workID},
+      </if>
+      <if test="contractTerm != null">
+        #{contractTerm},
+      </if>
+      <if test="conversionTime != null">
+        #{conversionTime},
+      </if>
+      <if test="notWorkDate != null">
+        #{notWorkDate},
+      </if>
+      <if test="beginContract != null">
+        #{beginContract},
+      </if>
+      <if test="endContract != null">
+        #{endContract}
+      </if>
+    </trim>
+  </insert>
+
+    <select id="getMaxWorkId" resultType="Integer">
+        select max(workID) from employee
+    </select>
+
+</mapper>

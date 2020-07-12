@@ -1,4 +1,4 @@
-package org.javaboy.vhr.service.impl;
+package org.javaboy.vhr.service.impl.system;
 
 import org.javaboy.vhr.mapper.RoleMenuMapper;
 import org.javaboy.vhr.model.Menu;
