@@ -40,4 +40,17 @@ public interface EmpBasicMapper {
      */
     Integer getMaxWorkId();
 
+    /**
+     * 删除用户
+     * @param id 用户id
+     * @return
+     */
+    int deleteEmployee(@Param("id") Integer id);
+
+    /**
+     * 修改员工信息
+     * @param employee
+     * @return
+     */
+    int updateEmployee(Employee employee);
 }

@@ -1,5 +1,7 @@
 package org.javaboy.vhr.controller.emp;
 
+import com.alibaba.excel.EasyExcel;
+import org.javaboy.vhr.mapper.EmpBasicMapper;
 import org.javaboy.vhr.model.*;
 import org.javaboy.vhr.service.emp.EmpBasicService;
 import org.javaboy.vhr.service.emp.NationService;
@@ -7,12 +9,19 @@ import org.javaboy.vhr.service.emp.PoliticsStatusService;
 import org.javaboy.vhr.service.system.DepartmentService;
 import org.javaboy.vhr.service.system.JobLevelService;
 import org.javaboy.vhr.service.system.PositionService;
+import org.javaboy.vhr.utils.EmployeeListener;
 import org.javaboy.vhr.utils.RespPageBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Objects;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 员工基本信息表
@@ -25,6 +34,10 @@ public class EmpBasicController {
 
     @Autowired
     EmpBasicService empBasicService;
+
+    //excel直接存库
+    @Autowired
+    EmpBasicMapper empBasicMapper;
 
     //政治面貌
     @Autowired
@@ -54,12 +67,14 @@ public class EmpBasicController {
     @GetMapping(value = "/")
     public RespPageBean getEmpBasicListByPage(
             @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "10") Integer size){
+            @RequestParam(defaultValue = "10") Integer size,
+            HttpServletRequest request){
 
         //计算数据开始位置索引，对应limit的第一个参数
         page = (page - 1) * size;
         //获取员工数据 -- 分页
         List<Employee> employeeList = empBasicService.getEmpBasicListByPage(page, size);
+        request.getSession().setAttribute("employeeList", employeeList);
         //获取数据总条数
         int EmpCount = empBasicService.getEmployeeCount();
         //分页响应结果
@@ -70,13 +85,62 @@ public class EmpBasicController {
     }
 
 
+    //添加员工
     @PostMapping(value = "/")
     public RespBean addEmployee(@RequestBody Employee employee){
+        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+        DecimalFormat decimalFormat = new DecimalFormat("##.00");
+
+        Date beginContract = employee.getBeginContract();
+        Date endContract = employee.getEndContract();
+        //根据合同起始日期和结束日期计算出合同是几年的
+        double month = (Double.parseDouble(yearFormat.format(endContract)) - Double.parseDouble(yearFormat.format(beginContract))) * 12 +
+                (Double.parseDouble(monthFormat.format(endContract)) - Double.parseDouble(monthFormat.format(beginContract)));
+
+        employee.setContractTerm(Double.parseDouble(decimalFormat.format(month / 12)));
         int result = empBasicService.addEmployee(employee);
         if (result > 0){
             return RespBean.success("添加员工成功");
         }
         return RespBean.error("添加员工失败");
+    }
+
+    //删除员工
+    @DeleteMapping(value = "/{id}")
+    public RespBean deleteEmployee(@PathVariable Integer id){
+        int result = empBasicService.deleteEmployee(id);
+        if (result > 0){
+            return RespBean.success("删除员工成功");
+        }
+        return RespBean.error("删除员工失败");
+    }
+
+    //修改员工
+    @PutMapping(value = "/")
+    public RespBean updateEmployee(@RequestBody Employee employee){
+        int result = empBasicService.updateEmployee(employee);
+        if (result > 0){
+            return RespBean.success("修改员工成功");
+        }
+        return RespBean.error("修改员工失败");
+    }
+
+    @GetMapping(value = "/export")
+    public void export(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        List<Employee> employeeList = (List<Employee>) request.getSession().getAttribute("employeeList");
+        // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf-8");
+        // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+        String fileName = URLEncoder.encode("员工信息", "UTF-8");
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+        EasyExcel.write(response.getOutputStream(), Employee.class).sheet("员工信息sheet页").doWrite(employeeList);
+    }
+
+    @PostMapping(value = "/uploadImport")
+    public void uploadImport(MultipartFile file) throws IOException {
+        EasyExcel.read(file.getInputStream(), Employee.class, new EmployeeListener(empBasicMapper)).sheet().doRead();
     }
 
     //加载政治面貌字典数据
@@ -136,6 +200,8 @@ public class EmpBasicController {
         }
         return RespBean.error("加载部门列表失败");
     }
+
+
 
 
 }

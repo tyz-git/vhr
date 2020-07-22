@@ -1,80 +1,114 @@
 package org.javaboy.vhr.model;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.javaboy.vhr.utils.DateConverter;
+import org.javaboy.vhr.utils.NationConverter;
 
 import java.util.Date;
 
-public class Employee {
+public class Employee{
+    @ExcelIgnore
     private Integer id;
 
+    @ExcelProperty(value = "姓名",index = 1)
     private String name;
 
+    @ExcelProperty(value = "性别",index = 2)
     private String gender;
 
+    @ExcelProperty(value = "出生日期", index = 3, converter = DateConverter.class)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Beijing")
     private Date birthday;
 
+    @ExcelProperty(value = "身份证号", index = 4)
     private String idCard;
 
+    @ExcelProperty(value = "婚姻状况", index = 5)
     private String wedlock;
 
+    @ExcelIgnore
     private Integer nationId;
 
+    @ExcelProperty(value = "政治面貌", index = 7)
     private String nativePlace;
 
+    @ExcelIgnore
     private Integer politicId;
 
+    @ExcelProperty(value = "邮箱", index = 8)
     private String email;
 
+    @ExcelProperty(value = "手机号", index = 9)
     private String phone;
 
+    @ExcelProperty(value = "家庭住址", index = 10)
     private String address;
 
+    @ExcelProperty(value = "所属部门", index = 11)
     private Integer departmentId;
 
+    @ExcelProperty(value = "职称", index = 13)
     private Integer jobLevelId;
 
+    @ExcelProperty(value = "职位", index = 12)
     private Integer posId;
 
+    @ExcelProperty(value = "聘用形式", index = 14)
     private String engageForm;
 
+    @ExcelProperty(value = "学历", index = 15)
     private String tiptopDegree;
 
+    @ExcelProperty(value = "专业", index = 16)
     private String specialty;
 
+    @ExcelProperty(value = "毕业院校", index = 17)
     private String school;
 
+    @ExcelProperty(value = "入职时间", index = 18)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Beijing")
     private Date beginDate;
 
+    @ExcelProperty(value = "工作状态", index = 19)
     private String workState;
 
+    @ExcelProperty(value = "工号", index = 0)
     private String workID;
 
+    @ExcelProperty(value = "合同期限(年)", index = 20)
     private Double contractTerm;
 
+    @ExcelProperty(value = "转正时间", index = 21)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Beijing")
     private Date conversionTime;
 
+    @ExcelIgnore
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Beijing")
     private Date notWorkDate;
 
+    @ExcelProperty(value = "合同起始时间", index = 22)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Beijing")
     private Date beginContract;
 
+    @ExcelProperty(value = "合同结束时间", index = 23)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Beijing")
     private Date endContract;
 
+    @ExcelIgnore
     private Integer workAge;
 
+//    @ExcelProperty(value = "民族", index = 6, converter = NationConverter.class)
+    @ExcelIgnore
     private Nation nation;
-
+    @ExcelIgnore
     private Politicsstatus politicsstatus;
-
+    @ExcelIgnore
     private Department department;
-
+    @ExcelIgnore
     private JobLevel jobLevel;
-
+    @ExcelIgnore
     private Position position;
 
     public Nation getNation() {

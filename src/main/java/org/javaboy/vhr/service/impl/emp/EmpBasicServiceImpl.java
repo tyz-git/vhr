@@ -19,6 +19,18 @@ public class EmpBasicServiceImpl implements EmpBasicService {
     EmpBasicMapper empBasicMapper;
 
     @Override
+    public int updateEmployee(Employee employee) {
+        int result = empBasicMapper.updateEmployee(employee);
+        return result;
+    }
+
+    @Override
+    public int deleteEmployee(Integer id) {
+        int result = empBasicMapper.deleteEmployee(id);
+        return result;
+    }
+
+    @Override
     public Integer getMaxWorkId() {
         Integer maxWorkId = empBasicMapper.getMaxWorkId();
         return maxWorkId;
