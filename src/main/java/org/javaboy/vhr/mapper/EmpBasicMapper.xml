@@ -61,11 +61,63 @@
     LEFT JOIN department d ON e.departmentId = d.id
     LEFT JOIN joblevel j ON e.jobLevelId = j.id
     LEFT JOIN position pos ON e.posId = pos.id
+    <where>
+        <if test="emp.name != null and emp.name != ''">
+            e.name like concat('%',#{emp.name},'%')
+        </if>
+        <if test="emp.politicId != null">
+           and e.politicId = #{emp.politicId}
+        </if>
+        <if test="emp.nationId != null">
+           and e.nationId = #{emp.nationId}
+        </if>
+        <if test="emp.posId != null">
+           and e.posId = #{emp.posId}
+        </if>
+        <if test="emp.departmentId != null">
+           and e.departmentId = #{emp.departmentId}
+        </if>
+        <if test="emp.jobLevelId != null">
+           and e.jobLevelId = #{emp.jobLevelId}
+        </if>
+        <if test="emp.engageForm != null and emp.engageForm != ''">
+           and e.engageForm = #{emp.engageForm}
+        </if>
+        <if test="beginDate != null">
+           and e.beginDate between #{beginDate[0]} and #{beginDate[1]}
+        </if>
+    </where>
     LIMIT #{page}, #{size}
   </select>
 
   <select id="getEmployeeCount" resultType="Integer">
     select count(*) from employee
+      <where>
+          <if test="emp.name != null and emp.name != ''">
+              name like concat('%',#{emp.name},'%')
+          </if>
+          <if test="emp.politicId != null">
+              and politicId = #{emp.politicId}
+          </if>
+          <if test="emp.nationId != null">
+              and nationId = #{emp.nationId}
+          </if>
+          <if test="emp.posId != null">
+              and posId = #{emp.posId}
+          </if>
+          <if test="emp.departmentId != null">
+              and departmentId = #{emp.departmentId}
+          </if>
+          <if test="emp.jobLevelId != null">
+              and jobLevelId = #{emp.jobLevelId}
+          </if>
+          <if test="emp.engageForm != null and emp.engageForm != ''">
+              and engageForm = #{emp.engageForm}
+          </if>
+          <if test="beginDate != null">
+              and beginDate between #{beginDate[0]} and #{beginDate[1]}
+          </if>
+      </where>
   </select>
 
   <insert id="addEmployee">

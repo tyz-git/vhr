@@ -60,23 +60,28 @@ public class EmpBasicController {
     DepartmentService departmentService;
 
     /**
-     * @param page 第几页
+     * @param page 当前页
      * @param size 每页展示条数
      * @return
      */
-    @GetMapping(value = "/")
+    @RequestMapping(value = "/getEmpBasicListByPage")
     public RespPageBean getEmpBasicListByPage(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
-            HttpServletRequest request){
+            @RequestBody Employee employee, HttpServletRequest request, Date[] beginDate){
 
+        //beginDate参数默认不为null，这里做一下处理，防止sql索引越界
+        if (beginDate.length != 2){
+            beginDate = null;
+        }
         //计算数据开始位置索引，对应limit的第一个参数
         page = (page - 1) * size;
         //获取员工数据 -- 分页
-        List<Employee> employeeList = empBasicService.getEmpBasicListByPage(page, size);
+        List<Employee> employeeList = empBasicService.getEmpBasicListByPage(page, size, employee, beginDate);
+        //数据装入session中，为导出excel做准备
         request.getSession().setAttribute("employeeList", employeeList);
         //获取数据总条数
-        int EmpCount = empBasicService.getEmployeeCount();
+        int EmpCount = empBasicService.getEmployeeCount(employee, beginDate);
         //分页响应结果
         RespPageBean respPageBean = new RespPageBean();
         respPageBean.setList(employeeList);

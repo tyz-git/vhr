@@ -2,6 +2,7 @@ package org.javaboy.vhr.service.emp;
 
 import org.javaboy.vhr.model.Employee;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,15 +15,19 @@ public interface EmpBasicService {
      * 获取员工数据 -- 分页
      * @param page 第几页
      * @param size 每页展示条数
+     * @param employee
+     * @param beginDate
      * @return
      */
-    List<Employee> getEmpBasicListByPage(Integer page, Integer size);
+    List<Employee> getEmpBasicListByPage(Integer page, Integer size, Employee employee, Date[] beginDate);
 
     /**
      * 获取数据总条数
      * @return
+     * @param employee
+     * @param beginDate
      */
-    int getEmployeeCount();
+    int getEmployeeCount(Employee employee, Date[] beginDate);
 
     /**
      * 添加员工信息
